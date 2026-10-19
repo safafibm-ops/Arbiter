@@ -11,7 +11,7 @@ export function AuditPage({ audit, setAudit }) {
   const reload = () => api.audit().then(setAudit)
   return (
     <div className="audit">
-      <div className={`integrity ${v.ok ? 'ok' : 'broken'}`}>
+      <div className={`integrity ${v.ok ? 'ok' : 'broken'}`} data-tour="integrity">
         <div className="integrity-icon" aria-hidden="true">{v.ok ? '✓' : '!'}</div>
         <div>
           <h2>{v.ok ? 'Every entry is intact' : `Entry #${v.broken_at} was changed`}</h2>
@@ -21,7 +21,7 @@ export function AuditPage({ audit, setAudit }) {
         </div>
         <div className="integrity-actions">
           <button className="btn btn-ghost" onClick={reload}>Verify chain</button>
-          <button className="btn btn-bad-ghost" onClick={() => api.tamper().then(reload).catch((e) => alert(e.message))}>Simulate an insider edit</button>
+          <button className="btn btn-bad-ghost" data-tour="tamper" onClick={() => api.tamper().then(reload).catch((e) => alert(e.message))}>Simulate an insider edit</button>
         </div>
       </div>
       <Panel title="Log">

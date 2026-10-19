@@ -129,7 +129,7 @@ export function Checkpoint({ v, pending = false }) {
         <div className="cp-foot">{v.latency_ms != null ? `Checked in ${v.latency_ms} ms` : 'Every decision → live dashboard · tamper-proof log'}</div>
       </div>
 
-      <div className="cp-col cp-decision">
+      <div className="cp-col cp-decision" data-tour="decision">
         <div className="cp-label">The decision, with a reason</div>
         <div className="cp-verdict-row">
           <Verdict d={v.decision} size="lg" />
@@ -247,7 +247,7 @@ export function Story({ story }) {
 
 function HeroApproval({ v }) {
   return (
-    <div className="hero-approval">
+    <div className="hero-approval" data-tour="approve">
       <div className="hero-approval-label">The agent is waiting. Your call:</div>
       <div className="approval-btns">
         <button className="btn btn-good" onClick={() => api.decide(v.id, 'approve')}>Approve once</button>
@@ -353,15 +353,15 @@ function Edge({ a, b, cls, marker, cross }) {
 
 // ------------------------------------------------------------------ small things
 
-export const Panel = ({ title, aside, children, className = '' }) => (
-  <section className={`panel ${className}`}>
+export const Panel = ({ title, aside, children, className = '', tour }) => (
+  <section className={`panel ${className}`} data-tour={tour}>
     {(title || aside) && <div className="panel-head"><h2>{title}</h2>{aside}</div>}
     {children}
   </section>
 )
 
-export const Kpi = ({ label, value, tone, hint }) => (
-  <div className={`kpi ${tone ? 'kpi-' + tone : ''}`} title={hint}>
+export const Kpi = ({ label, value, tone, hint, tour }) => (
+  <div className={`kpi ${tone ? 'kpi-' + tone : ''}`} title={hint} data-tour={tour}>
     <span className="kpi-label">{label}</span>
     <b className="kpi-value">{value}</b>
   </div>

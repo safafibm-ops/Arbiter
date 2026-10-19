@@ -7,6 +7,7 @@ import { AgentsPage } from './pages/Agents.jsx'
 import { ScannerPage } from './pages/Scanner.jsx'
 import { AuditPage } from './pages/Audit.jsx'
 import { PolicyPage } from './pages/Policy.jsx'
+import { Guide, guideSeen } from './Guide.jsx'
 
 const store = {
   get: (k) => { try { return localStorage.getItem(k) } catch { return null } },
@@ -37,6 +38,7 @@ export default function App() {
   const [running, setRunning] = useState(null)
   const [pinned, setPinned] = useState(null)
   const [online, setOnline] = useState(true)
+  const [guide, setGuide] = useState(() => !guideSeen())
 
   const refresh = useCallback(() => {
     api.state().then(setState).catch(() => {})
@@ -101,7 +103,7 @@ export default function App() {
 
   return (
     <div className={`shell ${state.enforce ? '' : 'is-off'}`}>
-      <Sidebar page={page} setPage={setPage} pending={pending.length} state={state} refresh={refresh} />
+      <Sidebar page={page} setPage={setPage} pending={pending.length} state={state} refresh={refresh} onGuide={() => setGuide(true)} />
       <div className="main">
         <TopBar page={page} state={state} audit={audit} theme={theme} toggleTheme={toggleTheme} online={online} />
         {!state.enforce && (
@@ -119,6 +121,7 @@ export default function App() {
           {page === 'policy' && <PolicyPage state={state} />}
         </div>
       </div>
+      <Guide open={guide} onClose={() => setGuide(false)} ctx={{ state, results, page, audit }} setPage={setPage} />
       <div className="toasts" aria-live="polite">
         {toasts.map((t) => <div key={t.id} className="toast"><span className="toast-icon">!</span>{t.message}</div>)}
       </div>

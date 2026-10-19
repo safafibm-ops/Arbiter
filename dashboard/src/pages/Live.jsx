@@ -20,7 +20,7 @@ export function LivePage({ feed, stats, shop, pending, story, pinned, setPinned,
         <Kpi label="Waiting for a manager" value={pending.length} tone={pending.length ? 'warn' : undefined} />
         <Kpi label="Blocked" value={stats.blocked} tone={stats.blocked ? 'bad' : undefined} />
         <Kpi label="Money protected" value={rupees(stats.saved)} tone="good" hint="Refunds Arbiter blocked" />
-        <Kpi label="Money lost" value={rupees(shop?.money_lost)} tone={shop?.money_lost ? 'bad' : undefined} hint="Paid to attackers while protection was off" />
+        <Kpi label="Money lost" value={rupees(shop?.money_lost)} tone={shop?.money_lost ? 'bad' : undefined} hint="Paid to attackers while protection was off" tour="kpi-lost" />
         <Kpi label="Time per check" value={stats.latency ? `${stats.latency} ms` : '–'} />
       </div>
 
@@ -69,7 +69,7 @@ export function LivePage({ feed, stats, shop, pending, story, pinned, setPinned,
           <Panel title="Run a scenario" aside={<button className="link" onClick={() => setPage('lab')}>All 15 →</button>}>
             <div className="quick">
               {QUICK.map((id) => scenarios.find((s) => s.id === id)).filter(Boolean).map((s) => (
-                <button key={s.id} className={`quick-btn ${running === s.id ? 'running' : ''} ${s.group}`} onClick={() => run(s.id)}>
+                <button key={s.id} data-tour={`run-${s.id}`} className={`quick-btn ${running === s.id ? 'running' : ''} ${s.group}`} onClick={() => run(s.id)}>
                   <span>{s.title}</span>
                   <small>{s.group === 'attack' ? 'Attack' : 'Everyday'}</small>
                 </button>

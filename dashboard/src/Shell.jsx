@@ -12,6 +12,7 @@ const PATHS = {
   moon: 'M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z',
   power: 'M12 3v8M6.3 6.8a8 8 0 1 0 11.4 0',
   reset: 'M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5',
+  guide: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01',
 }
 
 export const Icon = ({ name, size = 18 }) => (
@@ -38,7 +39,7 @@ const NAV = [
 
 export const TITLES = Object.fromEntries(NAV.map(([k, l]) => [k, l]))
 
-export function Sidebar({ page, setPage, pending, state, refresh }) {
+export function Sidebar({ page, setPage, pending, state, refresh, onGuide }) {
   return (
     <aside className="sidebar">
       <div className="brand">
@@ -50,7 +51,7 @@ export function Sidebar({ page, setPage, pending, state, refresh }) {
       </div>
       <nav className="nav" aria-label="Pages">
         {NAV.map(([k, label, icon]) => (
-          <button key={k} className={page === k ? 'active' : ''} onClick={() => setPage(k)} aria-current={page === k ? 'page' : undefined}>
+          <button key={k} data-tour={`nav-${k}`} className={page === k ? 'active' : ''} onClick={() => setPage(k)} aria-current={page === k ? 'page' : undefined}>
             <Icon name={icon} />
             <span>{label}</span>
             {k === 'live' && pending > 0 && <em className="nav-badge" title="Waiting for a manager">{pending}</em>}
@@ -58,7 +59,7 @@ export function Sidebar({ page, setPage, pending, state, refresh }) {
         ))}
       </nav>
       <div className="side-controls">
-        <button className={`protect ${state.enforce ? 'on' : 'off'}`} onClick={() => api.mode(!state.enforce)} role="switch" aria-checked={state.enforce}>
+        <button data-tour="protect" className={`protect ${state.enforce ? 'on' : 'off'}`} onClick={() => api.mode(!state.enforce)} role="switch" aria-checked={state.enforce}>
           <span className="protect-track"><span className="protect-knob" /></span>
           <span className="protect-text">
             <b>Protection {state.enforce ? 'on' : 'off'}</b>
@@ -70,6 +71,9 @@ export function Sidebar({ page, setPage, pending, state, refresh }) {
         </button>
         <button className="side-link" onClick={() => api.reset().then(refresh)}>
           <Icon name="reset" size={15} /> Reset demo
+        </button>
+        <button className="side-link" onClick={onGuide}>
+          <Icon name="guide" size={15} /> Replay guide
         </button>
       </div>
     </aside>
