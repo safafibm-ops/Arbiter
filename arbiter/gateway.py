@@ -236,7 +236,9 @@ def create_app(policy: str | Path | None = None, learned: str | Path | None = No
         if not sc:
             raise HTTPException(404, "unknown scenario")
         import httpx
-        base = str(request.base_url).rstrip("/")
+        # Scenario agents call this same server. When hosted (HOST set, e.g. on Render) go over loopback,
+        # not back out through the public proxy.
+        base = f"http://127.0.0.1:{os.getenv('PORT', '8000')}" if os.getenv("HOST") else str(request.base_url).rstrip("/")
         story: list[dict] = []
 
         def say(text: str, kind: str = "info"):
