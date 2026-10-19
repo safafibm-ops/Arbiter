@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+dashboard/node_modules/
+dashboard/dist/
+policies/learned.yaml
+redteam_results.json
+*.db
+.env

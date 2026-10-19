@@ -1,0 +1,112 @@
+# ShopCo policy: who may do what, and the company's own rules.
+# Arbiter denies anything not listed here (default deny).
+
+settings:
+  thresholds: { alert: 40, hold: 70, block: 90 }   # 0-39 allow · 40-69 allow + alert · 70-89 ask a human · 90+ block
+  approval_timeout_seconds: 120                   # no answer in time = reject (fail closed)
+  circuit_breaker: { blocks: 5, window_seconds: 120 }   # auto-pause an agent after 5 blocks in 2 minutes
+  max_chain_depth: 4
+  allowed_email_domains: [shopco.in]
+
+agents:
+  support_agent:
+    name: Support Agent
+    role: support
+    tools:
+      lookup_customer: {}
+      read_inbox: {}
+      send_email: {}
+    can_message: [billing_agent]
+
+  billing_agent:
+    name: Billing Agent
+    role: billing
+    tools:
+      lookup_customer: {}
+      read_inbox: {}
+      issue_refund: { max_amount: 5000 }      # may authorise refunds up to ₹5,000 (via the Refund Agent)
+    can_message: [refund_agent, support_agent]
+
+  refund_agent:
+    name: Refund Agent
+    role: refunds
+    tools:
+      lookup_customer: {}
+      issue_refund: { max_amount: 50000 }
+    can_message: [billing_agent]
+    baseline: { avg_refund: 900 }             # what "normal" looks like for this agent
+
+  admin_agent:
+    name: Admin Agent
+    role: admin
+    tools:
+      lookup_customer: {}
+      send_email: {}
+      delete_record: {}
+    can_message: []
+
+tools:
+  lookup_customer:
+    base_risk: 8
+    rate_limit_per_minute: 30
+    plain: "look up {customer_name}'s order #{order_id}"
+
+  read_inbox:
+    base_risk: 5
+    plain: "read the support inbox"
+
+  issue_refund:
+    base_risk: 40
+    high_risk: true
+    budget_per_agent_per_day: 100000
+    plain: "refund ₹{amount:,} on order #{order_id} to account {to_account}"
+    rules:
+      - id: refund-over-order-value
+        when: "amount > order.total"
+        then: block
+        reason: "the refund is more than the order value (₹{order.total:,})"
+      - id: refund-hard-cap
+        when: "amount > 50000"
+        then: block
+        reason: "refunds above ₹50,000 are never automatic"
+      - id: refund-auto-limit
+        when: "amount > 5000"
+        then: require_approval
+        risk: 20
+        reason: "above the ₹5,000 auto-approve limit"
+      - id: refund-new-account
+        when: "to_account not in customer.accounts"
+        then: score
+        risk: 10
+        reason: "the money is going to a bank account that isn't on file"
+
+  send_email:
+    base_risk: 20
+    high_risk: true
+    rate_limit_per_minute: 20
+    plain: "email {to} ({subject})"
+    rules:
+      - id: email-customer-list
+        when: "count_emails(body) >= 3"
+        then: block
+        reason: "the email contains a list of customer contacts"
+      - id: email-outside-domain
+        when: "domain(to) not in settings.allowed_email_domains and to != customer.email"
+        then: require_approval
+        risk: 40
+        reason: "the recipient is outside ShopCo and isn't the customer on record"
+
+  delete_record:
+    base_risk: 60
+    high_risk: true
+    plain: "delete {count} record(s): {target}"
+    rules:
+      - id: delete-bulk
+        when: "count > 1"
+        then: block
+        reason: "bulk delete ({count} records) is never allowed"
+      - id: delete-always-approve
+        when: "true"
+        then: require_approval
+        risk: 15
+        reason: "every delete needs a manager"
