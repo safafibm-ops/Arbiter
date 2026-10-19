@@ -1,0 +1,106 @@
+/* Arbiter site. Same identity as the Arbiter dashboard: charcoal + one blue accent, Ubuntu type,
+   green / amber / red reserved for allow / ask / block. Light work surfaces, charcoal "checkpoint" bands. */
+:root {
+  color-scheme: light;
+  --bg: #f3f4f6;
+  --bg-2: #eceef2;
+  --surface: #ffffff;
+  --surface-2: #f7f8fa;
+  --line: #e1e4e9;
+  --line-strong: #cdd1d8;
+  --ink: #16181d;
+  --ink-2: #444852;
+  --muted: #6b707b;
+  --brand: #2563eb;
+  --brand-2: #1d4fd0;
+  --brand-soft: #e8effd;
+  --link: #1d4fd0;
+
+  /* charcoal band: same in both themes, like the dashboard's checkpoint panel */
+  --char: #1e1f23;
+  --char-2: #26282d;
+  --char-3: #2f3137;
+  --char-ink: #f2f3f5;
+  --char-ink-2: #c9ccd3;
+  --char-muted: #9a9ea8;
+  --char-line: rgba(255, 255, 255, 0.09);
+  --char-accent: #7ea6ff;
+
+  --good: #0ca30c; --good-ink: #12722d; --good-tint: #e6f5ea;
+  --warn: #f5a70f; --warn-ink: #8a5a00; --warn-tint: #fff4dc;
+  --alert: #ec835a; --alert-ink: #9a4318; --alert-tint: #fdece4;
+  --bad: #d03b3b; --bad-ink: #b02626; --bad-tint: #fde9e9;
+
+  /* risk factors, fixed order (as in the dashboard) */
+  --c0: #2a78d6; --c1: #eb6834; --c2: #1baf7a; --c3: #d99500;
+
+  --shadow-sm: 0 1px 2px rgba(20, 22, 26, 0.06);
+  --shadow: 0 1px 2px rgba(20, 22, 26, 0.05), 0 8px 28px rgba(20, 22, 26, 0.07);
+  --radius: 14px;
+  --radius-lg: 20px;
+
+  --display: 'Ubuntu', 'Noto Sans Devanagari', 'Noto Sans Kannada', system-ui, sans-serif;
+  --sans: 'Ubuntu', 'Noto Sans Devanagari', 'Noto Sans Kannada', system-ui, sans-serif;
+  --mono: 'Ubuntu Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --gutter: max(20px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(20px, env(safe-area-inset-right, 0px));
+  --maxw: 1200px;
+  --header-h: 64px;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #111214;
+  --bg-2: #17181b;
+  --surface: #1a1b1e;
+  --surface-2: #202125;
+  --line: #2c2e33;
+  --line-strong: #3b3e45;
+  --ink: #eeeff1;
+  --ink-2: #c0c3ca;
+  --muted: #8e929c;
+  --brand: #3b76f6;
+  --brand-2: #5a8cf8;
+  --brand-soft: #1b2640;
+  --link: #86acff;
+  --char: #18191c;
+  --char-2: #1f2024;
+  --char-3: #27292e;
+  --good: #2fbf4f; --good-ink: #72d88d; --good-tint: #15261a;
+  --warn: #f5b52e; --warn-ink: #f3c766; --warn-tint: #2c2410;
+  --alert: #ef9469; --alert-ink: #f2a882; --alert-tint: #2e1e17;
+  --bad: #e05353; --bad-ink: #ff8f8f; --bad-tint: #301a1b;
+  --c0: #4a8fe6; --c1: #f07a4a; --c2: #2cc28d; --c3: #e9ad22;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #111214;
+    --bg-2: #17181b;
+    --surface: #1a1b1e;
+    --surface-2: #202125;
+    --line: #2c2e33;
+    --line-strong: #3b3e45;
+    --ink: #eeeff1;
+    --ink-2: #c0c3ca;
+    --muted: #8e929c;
+    --brand: #3b76f6;
+    --brand-2: #5a8cf8;
+    --brand-soft: #1b2640;
+    --link: #86acff;
+    --char: #18191c;
+    --char-2: #1f2024;
+    --char-3: #27292e;
+    --good: #2fbf4f; --good-ink: #72d88d; --good-tint: #15261a;
+    --warn: #f5b52e; --warn-ink: #f3c766; --warn-tint: #2c2410;
+    --alert: #ef9469; --alert-ink: #f2a882; --alert-tint: #2e1e17;
+    --bad: #e05353; --bad-ink: #ff8f8f; --bad-tint: #301a1b;
+    --c0: #4a8fe6; --c1: #f07a4a; --c2: #2cc28d; --c3: #e9ad22;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+}

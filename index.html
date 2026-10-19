@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Arbiter · Every AI agent action, judged before it runs</title>
+    <meta name="description" content="Arbiter is a control layer for AI agents. It checks every tool call and agent-to-agent message before it runs, in English, Hindi, Kannada and Hinglish." />
+    <meta property="og:title" content="Arbiter · AI agent checkpoint" />
+    <meta property="og:description" content="Safe actions run, risky ones wait for a manager, harmful ones are blocked with a plain reason. 0/10 attacks got through in our red-team suite." />
+    <meta property="og:image" content="og.jpg" />
+    <meta name="theme-color" content="#1e1f23" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <script>
+      try { var t = localStorage.getItem('arbiter-theme'); if (t) document.documentElement.dataset.theme = t } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
